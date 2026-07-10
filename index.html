@@ -208,6 +208,41 @@ main{max-width:640px; margin:0 auto; padding:20px 16px 20px; position:relative; 
 .note-card{border-color:rgba(194,59,34,0.25);}
 .note-list{margin:0; padding-inline-start:20px; font-size:13.5px; line-height:1.9;}
 
+.thanks-card{
+  text-align:center;
+  background:linear-gradient(135deg, rgba(201,161,92,0.12), rgba(194,59,34,0.06));
+  border-color:rgba(201,161,92,0.4);
+  overflow:hidden;
+  position:relative;
+}
+.thanks-card::before{
+  content:"";
+  position:absolute;
+  top:-50%; left:-50%;
+  width:200%; height:200%;
+  background:conic-gradient(from 0deg, transparent, rgba(201,161,92,0.15), transparent 30%);
+  animation:rotateGlow 6s linear infinite;
+}
+@keyframes rotateGlow{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+.thanks-text{
+  margin:0;
+  font-family:var(--font-display);
+  font-size:16px;
+  font-weight:700;
+  color:var(--red-deep);
+  line-height:1.7;
+  position:relative;
+  z-index:1;
+  animation:thanksPulse 2.2s ease-in-out infinite;
+}
+@keyframes thanksPulse{
+  0%, 100%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+}
+
 /* ===== Tab bar ===== */
 .tab-bar{
   position:fixed; bottom:0; left:0; right:0;
@@ -606,6 +641,10 @@ button:focus-visible, input:focus-visible, select:focus-visible{
         <li>VPN ضروري لفتح واتساب/إنستقرام/جوجل — فعّله قبل ما تطير</li>
         <li>خذ صورة من الفندق والحجوزات بالصيني تعرضها للتاكسي</li>
       </ul>
+    </div>
+
+    <div class="doc-card thanks-card">
+      <p class="thanks-text">ندى و أحمد شكراً لكم 🙏🌹</p>
     </div>
   </section>
 
