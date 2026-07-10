@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>旅程 · رحلتي إلى الصين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens ===== */
+:root{
+  --ink: #1a1a1a;
+  --paper: #faf6ee;
+  --paper-2: #f2ead9;
+  --red: #c23b22;
+  --red-deep: #962712;
+  --jade: #3d6b5c;
+  --gold: #c9a15c;
+  --line: rgba(26,26,26,0.12);
+  --shadow: 0 8px 24px rgba(26,26,26,0.08);
+  --font-display: "Noto Serif SC", "Tajawal", serif;
+  --font-body: "Tajawal", "Noto Sans SC", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(circle at 100% 0%, rgba(194,59,34,0.06), transparent 45%),
+    var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  min-height:100vh;
+  padding-bottom:84px;
+}
+
+::selection{background:var(--gold); color:var(--ink);}
+
+/* subtle paper texture via layered gradients */
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(26,26,26,0.015) 0px, transparent 1px, transparent 2px);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===== Header ===== */
+.app-header{
+  background:var(--ink);
+  color:var(--paper);
+  padding:22px 20px 0;
+  position:relative;
+  z-index:2;
+}
+.header-inner{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  max-width:640px;
+  margin:0 auto;
+}
+.seal{
+  flex-shrink:0;
+  width:52px;height:52px;
+  border-radius:8px;
+  border:2.5px solid var(--red);
+  color:var(--red);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);
+  font-size:26px;
+  font-weight:700;
+  transform:rotate(-4deg);
+  background:rgba(194,59,34,0.08);
+}
+.header-text h1{
+  font-family:var(--font-display);
+  font-size:22px;
+  font-weight:700;
+  margin:0 0 2px;
+  letter-spacing:0.3px;
+}
+.header-sub{
+  margin:0;
+  font-size:13px;
+  color:rgba(250,246,238,0.65);
+  font-family:var(--font-mono);
+  direction:ltr;
+  text-align:right;
+}
+.days-strip{
+  max-width:640px;
+  margin:16px auto 0;
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:0 0 14px;
+  scrollbar-width:none;
+}
+.days-strip::-webkit-scrollbar{display:none;}
+.day-chip{
+  flex-shrink:0;
+  width:44px;
+  padding:6px 0;
+  border-radius:10px;
+  background:rgba(250,246,238,0.08);
+  text-align:center;
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:rgba(250,246,238,0.5);
+  border:1px solid transparent;
+}
+.day-chip.today{
+  background:var(--red);
+  color:var(--paper);
+  font-weight:700;
+}
+.day-chip .dnum{display:block; font-size:15px; margin-top:1px;}
+
+/* ===== Layout ===== */
+main{max-width:640px; margin:0 auto; padding:20px 16px 20px; position:relative; z-index:1;}
+.page{display:none;}
+.page.active{display:block; animation:fadeIn 0.25s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+.page-head{margin-bottom:18px;}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:1.5px;
+  color:var(--red);
+  text-transform:uppercase;
+  direction:ltr;
+  display:inline-block;
+}
+.page-head h2{
+  font-family:var(--font-display);
+  font-size:26px;
+  margin:4px 0 0;
+  font-weight:700;
+}
+
+/* ===== Cards ===== */
+.doc-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+  position:relative;
+}
+.doc-title{
+  font-family:var(--font-display);
+  font-size:17px;
+  margin:0 0 8px;
+  font-weight:700;
+}
+.doc-desc{margin:0 0 12px; font-size:13.5px; color:#555;}
+
+/* ===== Home stats ===== */
+.stat-row{display:flex; gap:10px; margin-bottom:16px;}
+.stat-card{
+  flex:1;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 8px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+.stat-num{
+  display:block;
+  font-family:var(--font-mono);
+  font-size:20px;
+  font-weight:600;
+  color:var(--red-deep);
+}
+.stat-label{font-size:11px; color:#777;}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.quick-btn{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 4px;
+  font-family:var(--font-body);
+  font-size:12.5px;
+  font-weight:500;
+  color:var(--ink);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  transition:transform .15s ease, background .15s ease;
+}
+.quick-btn span:first-child{font-size:20px;}
+.quick-btn:active{transform:scale(0.95); background:var(--gold);}
+
+.note-card{border-color:rgba(194,59,34,0.25);}
+.note-list{margin:0; padding-inline-start:20px; font-size:13.5px; line-height:1.9;}
+
+/* ===== Tab bar ===== */
+.tab-bar{
+  position:fixed; bottom:0; left:0; right:0;
+  background:var(--ink);
+  display:flex;
+  z-index:10;
+  border-top:2px solid var(--red);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tab-btn{
+  flex:1;
+  background:none;
+  border:none;
+  color:rgba(250,246,238,0.5);
+  font-family:var(--font-body);
+  font-size:10px;
+  padding:9px 2px 8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  cursor:pointer;
+}
+.tab-icon{font-size:18px;}
+.tab-btn.active{color:var(--paper);}
+.tab-btn.active .tab-icon{filter:drop-shadow(0 0 6px rgba(194,59,34,0.6));}
+
+/* ===== Itinerary ===== */
+.city-filter{
+  display:flex; gap:8px; overflow-x:auto; margin-bottom:14px; padding-bottom:4px;
+  scrollbar-width:none;
+}
+.city-filter::-webkit-scrollbar{display:none;}
+.city-chip{
+  flex-shrink:0;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:999px;
+  padding:6px 16px;
+  font-size:12.5px;
+  cursor:pointer;
+  font-family:var(--font-body);
+}
+.city-chip.active{background:var(--red); color:#fff; border-color:var(--red);}
+
+.day-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+  border-inline-start:4px solid var(--gold);
+}
+.day-card.today-card{border-inline-start-color:var(--red);}
+.day-card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  margin-bottom:8px;
+}
+.day-card-date{
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--red-deep);
+  direction:ltr;
+}
+.day-card-city{font-family:var(--font-display); font-weight:700; font-size:15px;}
+.day-card-title{font-size:14px; color:#444; margin:0;}
+
+/* ===== Phrases ===== */
+.search-box{
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#fff;
+  font-family:var(--font-body);
+  font-size:14px;
+  margin-bottom:12px;
+}
+.phrase-categories{
+  display:flex; gap:8px; overflow-x:auto; margin-bottom:14px;
+  scrollbar-width:none;
+}
+.phrase-categories::-webkit-scrollbar{display:none;}
+.phrase-cat-chip{
+  flex-shrink:0;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:999px;
+  padding:6px 14px;
+  font-size:12.5px;
+  cursor:pointer;
+}
+.phrase-cat-chip.active{background:var(--jade); color:#fff; border-color:var(--jade);}
+
+.phrase-item{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+}
+.phrase-ar{font-size:15px; font-weight:500; margin-bottom:6px;}
+.phrase-zh{
+  font-family:"Noto Serif SC", serif;
+  font-size:19px;
+  color:var(--red-deep);
+  direction:ltr;
+  text-align:left;
+  margin-bottom:2px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  justify-content:flex-start;
+}
+.speak-btn{
+  flex-shrink:0;
+  width:32px; height:32px;
+  border-radius:50%;
+  border:1.5px solid var(--red);
+  background:rgba(194,59,34,0.06);
+  color:var(--red-deep);
+  font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:transform .12s ease, background .12s ease;
+}
+.speak-btn:active{transform:scale(0.88); background:var(--red); color:#fff;}
+.speak-btn.playing{background:var(--red); color:#fff;}
+.phrase-pinyin{
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:#888;
+  direction:ltr;
+  text-align:left;
+}
+
+/* ===== Money ===== */
+.converter-card{text-align:center;}
+.rate-line{
+  font-family:var(--font-mono);
+  font-size:13px;
+  color:var(--jade);
+  margin-bottom:14px;
+  direction:ltr;
+}
+.convert-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+.convert-box{flex:1; text-align:right;}
+.convert-box label{font-size:11px; color:#888; display:block; margin-bottom:4px;}
+.convert-box input{
+  width:100%;
+  padding:12px;
+  font-size:18px;
+  font-family:var(--font-mono);
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  text-align:center;
+}
+.convert-swap{font-size:20px; color:var(--gold);}
+.ghost-btn{
+  background:none;
+  border:1.5px solid var(--red);
+  color:var(--red-deep);
+  border-radius:10px;
+  padding:9px 16px;
+  font-size:13px;
+  font-family:var(--font-body);
+  cursor:pointer;
+}
+.hint-text{font-size:11px; color:#999; margin-top:8px;}
+
+.quick-ref-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.quick-ref-item{
+  background:var(--paper-2);
+  border-radius:10px;
+  padding:10px;
+  font-size:12.5px;
+  display:flex;
+  justify-content:space-between;
+}
+.quick-ref-item b{font-family:var(--font-mono); color:var(--red-deep);}
+
+/* ===== Map / places ===== */
+.place-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+.place-icon{font-size:22px; flex-shrink:0;}
+.place-name{font-weight:700; font-size:14.5px; margin-bottom:2px;}
+.place-city{font-size:11px; color:var(--red-deep); font-family:var(--font-mono);}
+.place-note{font-size:13px; color:#555; margin-top:4px;}
+.place-link{
+  display:inline-block; margin-top:6px;
+  font-size:12px; color:var(--jade); text-decoration:none; font-weight:600;
+}
+
+/* ===== Budget ===== */
+.budget-summary{text-align:center;}
+.budget-total-num{
+  display:block;
+  font-family:var(--font-mono);
+  font-size:32px;
+  font-weight:600;
+  color:var(--red-deep);
+}
+.budget-breakdown{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+.bd-item{
+  background:var(--paper-2);
+  border-radius:10px;
+  padding:8px 4px;
+  font-size:11.5px;
+}
+.bd-item b{display:block; font-family:var(--font-mono); font-size:13px; color:var(--jade);}
+
+.form-row{display:flex; gap:8px; margin-bottom:10px;}
+.form-row input, .form-row select{flex:1; min-width:0;}
+input, select{
+  padding:11px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  font-family:var(--font-body);
+  font-size:14px;
+  background:#fff;
+  color:var(--ink);
+}
+.expense-form input[type="text"]{width:100%; margin-bottom:12px;}
+.stamp-btn{
+  width:100%;
+  background:var(--red);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  padding:13px;
+  font-family:var(--font-body);
+  font-weight:700;
+  font-size:14.5px;
+  cursor:pointer;
+  transition:transform .15s ease;
+}
+.stamp-btn:active{transform:scale(0.97); background:var(--red-deep);}
+
+.expense-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+  font-size:13.5px;
+}
+.expense-row:last-child{border-bottom:none;}
+.expense-cat{font-size:18px; margin-inline-end:8px;}
+.expense-amount{font-family:var(--font-mono); font-weight:600; color:var(--red-deep);}
+.expense-del{background:none; border:none; color:#bbb; font-size:16px; cursor:pointer; padding:0 4px;}
+.empty-state{text-align:center; color:#999; font-size:13px; padding:20px 0;}
+
+/* ===== Packing / checklist ===== */
+.checklist-group{margin-bottom:14px;}
+.checklist-cat-title{
+  font-family:var(--font-display);
+  font-size:14px;
+  font-weight:700;
+  margin:18px 0 8px;
+  color:var(--red-deep);
+}
+.checklist-cat-title:first-child{margin-top:0;}
+.check-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px 14px;
+  margin-bottom:8px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+}
+.check-item.done{background:var(--paper-2);}
+.check-item.done .check-text{text-decoration:line-through; color:#999;}
+.check-seal{
+  width:26px; height:26px;
+  border-radius:6px;
+  border:2px solid var(--red);
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--red);
+  font-size:14px;
+  font-weight:700;
+  transition:all .15s ease;
+}
+.check-item.done .check-seal{
+  background:var(--red);
+  color:#fff;
+  transform:rotate(-8deg);
+}
+.check-text{flex:1; font-size:14px;}
+.check-del{background:none; border:none; color:#ccc; font-size:16px; cursor:pointer;}
+
+/* responsive nicety */
+@media (min-width:640px){
+  .quick-grid{grid-template-columns:repeat(6,1fr);}
+}
+
+/* focus visibility */
+button:focus-visible, input:focus-visible, select:focus-visible{
+  outline:2px solid var(--jade);
+  outline-offset:2px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important;}
+}
+
+</style>
+</head>
+<body>
+
+<!-- Seal-stamp splash / header -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="seal" aria-hidden="true">旅</div>
+    <div class="header-text">
+      <h1>رحلتي إلى الصين</h1>
+      <p class="header-sub">١٤ يوليو — ٩ أغسطس · ٢٦ يوماً</p>
+    </div>
+  </div>
+  <div class="days-strip" id="daysStrip"></div>
+</header>
+
+<main id="main">
+
+  <!-- HOME -->
+  <section class="page active" id="page-home" data-page="home">
+    <div class="page-head">
+      <span class="eyebrow">欢迎 · مرحباً</span>
+      <h2>نظرة عامة</h2>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <span class="stat-num" id="statDaysLeft">—</span>
+        <span class="stat-label">يوم متبقي</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="statPacked">0/0</span>
+        <span class="stat-label">التحضيرات</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num" id="statSpent">¥0</span>
+        <span class="stat-label">المصروف</span>
+      </div>
+    </div>
+
+    <div class="doc-card">
+      <h3 class="doc-title">جواز السفر السريع</h3>
+      <p class="doc-desc">اختصارات لأهم الأقسام أثناء التنقل.</p>
+      <div class="quick-grid">
+        <button class="quick-btn" data-goto="itinerary"><span>🗺️</span>الجدول</button>
+        <button class="quick-btn" data-goto="phrases"><span>💬</span>عبارات</button>
+        <button class="quick-btn" data-goto="money"><span>¥</span>العملة</button>
+        <button class="quick-btn" data-goto="map"><span>📍</span>الخريطة</button>
+        <button class="quick-btn" data-goto="budget"><span>💰</span>المصاريف</button>
+        <button class="quick-btn" data-goto="packing"><span>🧳</span>التحضير</button>
+      </div>
+    </div>
+
+    <div class="doc-card note-card">
+      <h3 class="doc-title">تذكير مهم</h3>
+      <ul class="note-list">
+        <li>حمّل <strong>Alipay</strong> و اربطه ببطاقتك قبل السفر — الدفع بالكاش نادر جداً</li>
+        <li>حمّل خرائط أوفلاين (Google Maps لا يعمل بشكل جيد — استخدم <strong>Amap/高德地图</strong> أو Apple Maps)</li>
+        <li>VPN ضروري لفتح واتساب/إنستقرام/جوجل — فعّله قبل ما تطير</li>
+        <li>خذ صورة من الفندق والحجوزات بالصيني تعرضها للتاكسي</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ITINERARY -->
+  <section class="page" id="page-itinerary" data-page="itinerary">
+    <div class="page-head">
+      <span class="eyebrow">行程 · الجدول</span>
+      <h2>برنامج الرحلة</h2>
+    </div>
+    <div class="city-filter" id="cityFilter"></div>
+    <div class="itinerary-list" id="itineraryList"></div>
+  </section>
+
+  <!-- PHRASES -->
+  <section class="page" id="page-phrases" data-page="phrases">
+    <div class="page-head">
+      <span class="eyebrow">短语 · عبارات</span>
+      <h2>مترجم العبارات</h2>
+    </div>
+    <input type="search" class="search-box" id="phraseSearch" placeholder="ابحث عن عبارة...">
+    <div class="phrase-categories" id="phraseCategories"></div>
+    <div class="phrase-list" id="phraseList"></div>
+  </section>
+
+  <!-- MONEY -->
+  <section class="page" id="page-money" data-page="money">
+    <div class="page-head">
+      <span class="eyebrow">货币 · العملة</span>
+      <h2>محول العملة</h2>
+    </div>
+    <div class="doc-card converter-card">
+      <div class="rate-line" id="rateLine">١ يوان = — ريال</div>
+      <div class="convert-row">
+        <div class="convert-box">
+          <label>يوان صيني (CNY)</label>
+          <input type="number" id="cnyInput" inputmode="decimal" placeholder="0">
+        </div>
+        <div class="convert-swap">⇄</div>
+        <div class="convert-box">
+          <label>ريال سعودي (SAR)</label>
+          <input type="number" id="sarInput" inputmode="decimal" placeholder="0">
+        </div>
+      </div>
+      <button class="ghost-btn" id="refreshRate">تحديث سعر الصرف</button>
+      <p class="hint-text" id="rateUpdated"></p>
+    </div>
+    <div class="doc-card">
+      <h3 class="doc-title">مرجع سريع (الصين)</h3>
+      <div class="quick-ref-grid" id="quickRefGrid"></div>
+    </div>
+
+    <div class="doc-card note-card">
+      <h3 class="doc-title">🇰🇷 تنبيه: جزيرة جيجو</h3>
+      <p class="doc-desc">من ١ إلى ٦ أغسطس بتكون بكوريا الجنوبية — العملة هناك الوون الكوري (KRW) مو اليوان.</p>
+      <div class="convert-row">
+        <div class="convert-box">
+          <label>وون كوري (KRW)</label>
+          <input type="number" id="krwInput" inputmode="decimal" placeholder="0">
+        </div>
+        <div class="convert-swap">⇄</div>
+        <div class="convert-box">
+          <label>ريال سعودي (SAR)</label>
+          <input type="number" id="sarKrwInput" inputmode="decimal" placeholder="0">
+        </div>
+      </div>
+      <p class="hint-text" id="krwRateLine"></p>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="page" id="page-map" data-page="map">
+    <div class="page-head">
+      <span class="eyebrow">地图 · الخريطة</span>
+      <h2>الأماكن المهمة</h2>
+    </div>
+    <div class="city-filter" id="mapCityFilter"></div>
+    <div class="place-list" id="placeList"></div>
+  </section>
+
+  <!-- BUDGET -->
+  <section class="page" id="page-budget" data-page="budget">
+    <div class="page-head">
+      <span class="eyebrow">预算 · المصاريف</span>
+      <h2>متتبع المصاريف</h2>
+    </div>
+
+    <div class="doc-card budget-summary">
+      <div class="budget-total">
+        <span class="budget-total-num" id="budgetTotal">¥0</span>
+        <span class="stat-label">إجمالي المصروف</span>
+      </div>
+      <div class="budget-breakdown" id="budgetBreakdown"></div>
+    </div>
+
+    <form class="doc-card expense-form" id="expenseForm">
+      <h3 class="doc-title">إضافة مصروف</h3>
+      <div class="form-row">
+        <input type="number" inputmode="decimal" id="expAmount" placeholder="المبلغ (¥)" required>
+        <select id="expCategory">
+          <option value="أكل">🍜 أكل</option>
+          <option value="مواصلات">🚕 مواصلات</option>
+          <option value="فندق">🏨 فندق</option>
+          <option value="تسوق">🛍️ تسوق</option>
+          <option value="ترفيه">🎡 ترفيه</option>
+          <option value="أخرى">📦 أخرى</option>
+        </select>
+      </div>
+      <input type="text" id="expNote" placeholder="ملاحظة (اختياري)">
+      <button type="submit" class="stamp-btn">تسجيل المصروف</button>
+    </form>
+
+    <div class="doc-card">
+      <h3 class="doc-title">آخر المصاريف</h3>
+      <div class="expense-list" id="expenseList"></div>
+    </div>
+  </section>
+
+  <!-- PACKING -->
+  <section class="page" id="page-packing" data-page="packing">
+    <div class="page-head">
+      <span class="eyebrow">清单 · التحضير</span>
+      <h2>قائمة التحضيرات والتسوق</h2>
+    </div>
+
+    <div class="checklist-group" id="checklistGroup"></div>
+
+    <form class="doc-card add-item-form" id="addItemForm">
+      <h3 class="doc-title">إضافة عنصر</h3>
+      <div class="form-row">
+        <input type="text" id="newItemText" placeholder="اسم العنصر" required>
+        <select id="newItemCategory"></select>
+      </div>
+      <button type="submit" class="stamp-btn">إضافة</button>
+    </form>
+  </section>
+
+</main>
+
+<nav class="tab-bar" id="tabBar">
+  <button class="tab-btn active" data-page="home"><span class="tab-icon">🏠</span><span>الرئيسية</span></button>
+  <button class="tab-btn" data-page="itinerary"><span class="tab-icon">🗺️</span><span>الجدول</span></button>
+  <button class="tab-btn" data-page="phrases"><span class="tab-icon">💬</span><span>عبارات</span></button>
+  <button class="tab-btn" data-page="money"><span class="tab-icon">¥</span><span>العملة</span></button>
+  <button class="tab-btn" data-page="map"><span class="tab-icon">📍</span><span>الخريطة</span></button>
+  <button class="tab-btn" data-page="budget"><span class="tab-icon">💰</span><span>المصاريف</span></button>
+  <button class="tab-btn" data-page="packing"><span class="tab-icon">🧳</span><span>التحضير</span></button>
+</nav>
+
+<script>
+// ===== Trip dates =====
+const TRIP_START = "2026-07-14";
+const TRIP_END = "2026-08-09"; // 26 days total
+
+// ===== Itinerary (based on user's confirmed real trip plan) =====
+const ITINERARY = [
+  {day:1, date:"2026-07-14", city:"بكين", title:"الوصول - استقرار بالفندق"},
+  {day:2, date:"2026-07-15", city:"بكين", title:"الساحة السماوية + المدينة المحرمة"},
+  {day:3, date:"2026-07-16", city:"بكين", title:"سور الصين العظيم"},
+  {day:4, date:"2026-07-17", city:"بكين", title:"معبد السماء + شارع تسوق"},
+  {day:5, date:"2026-07-18", city:"بكين", title:"يوم حر / تسوق"},
+  {day:6, date:"2026-07-19", city:"بكين", title:"يوم حر"},
+  {day:7, date:"2026-07-20", city:"بكين", title:"يوم حر"},
+  {day:8, date:"2026-07-21", city:"بكين", title:"قطار سريع إلى تشنغدو", travel:true},
+  {day:9, date:"2026-07-22", city:"تشنغدو", title:"قاعدة أبحاث الباندا"},
+  {day:10, date:"2026-07-23", city:"تشنغدو", title:"شارع كوانزهاي القديم + الطعام المحلي"},
+  {day:11, date:"2026-07-24", city:"تشنغدو", title:"قطار سريع إلى تشونغتشينغ", travel:true},
+  {day:12, date:"2026-07-25", city:"تشونغتشينغ", title:"كهف هونغيا (Hongya Cave) + الإطلالة الليلية"},
+  {day:13, date:"2026-07-26", city:"تشونغتشينغ", title:"بلدة تشيتشيكو القديمة + التلفريك فوق النهر"},
+  {day:14, date:"2026-07-27", city:"تشونغتشينغ", title:"قطار سريع إلى شنغهاي", travel:true},
+  {day:15, date:"2026-07-28", city:"شنغهاي", title:"البند (The Bund) + نهر هوانغبو"},
+  {day:16, date:"2026-07-29", city:"شنغهاي", title:"حي يو يوان + برج شنغهاي"},
+  {day:17, date:"2026-07-30", city:"شنغهاي", title:"ديزني لاند شنغهاي"},
+  {day:18, date:"2026-07-31", city:"شنغهاي", title:"يوم حر / تسوق"},
+  {day:19, date:"2026-08-01", city:"جيجو (كوريا)", title:"طيران إلى جزيرة جيجو", travel:true},
+  {day:20, date:"2026-08-02", city:"جيجو (كوريا)", title:"سيونغسان إلتشولبونغ (فوهة بركانية)"},
+  {day:21, date:"2026-08-03", city:"جيجو (كوريا)", title:"جبل هالا / شلالات جيجو"},
+  {day:22, date:"2026-08-04", city:"جيجو (كوريا)", title:"شواطئ جيجو + أسواق محلية"},
+  {day:23, date:"2026-08-05", city:"جيجو (كوريا)", title:"يوم حر / استرخاء"},
+  {day:24, date:"2026-08-06", city:"بكين", title:"طيران عودة إلى بكين", travel:true},
+  {day:25, date:"2026-08-07", city:"بكين", title:"تسوق أخير + تجهيز الحقائب"},
+  {day:26, date:"2026-08-08", city:"بكين", title:"يوم احتياطي"},
+  {day:27, date:"2026-08-09", city:"بكين", title:"المغادرة إلى الوطن", travel:true},
+];
+
+// ===== Phrases =====
+const PHRASE_CATEGORIES = ["الكل","تحية","مطعم","تاكسي/مواصلات","تسوق","فندق","طوارئ"];
+
+const PHRASES = [
+  {cat:"تحية", ar:"مرحباً", zh:"你好", pinyin:"Nǐ hǎo"},
+  {cat:"تحية", ar:"شكراً لك", zh:"谢谢", pinyin:"Xièxiè"},
+  {cat:"تحية", ar:"عفواً / لا شكر على واجب", zh:"不客气", pinyin:"Bú kèqì"},
+  {cat:"تحية", ar:"آسف / اعذرني", zh:"对不起", pinyin:"Duìbùqǐ"},
+  {cat:"تحية", ar:"مع السلامة", zh:"再见", pinyin:"Zàijiàn"},
+  {cat:"تحية", ar:"هل تتكلم إنجليزي؟", zh:"你会说英语吗？", pinyin:"Nǐ huì shuō yīngyǔ ma?"},
+  {cat:"تحية", ar:"لا أفهم", zh:"我不明白", pinyin:"Wǒ bù míngbái"},
+
+  {cat:"مطعم", ar:"الطاولة لشخص واحد من فضلك", zh:"一位，谢谢", pinyin:"Yī wèi, xièxiè"},
+  {cat:"مطعم", ar:"القائمة من فضلك", zh:"请给我菜单", pinyin:"Qǐng gěi wǒ càidān"},
+  {cat:"مطعم", ar:"بدون لحم خنزير من فضلك", zh:"不要猪肉，谢谢", pinyin:"Bú yào zhūròu, xièxiè"},
+  {cat:"مطعم", ar:"بدون لحم إطلاقاً (نباتي)", zh:"我吃素", pinyin:"Wǒ chī sù"},
+  {cat:"مطعم", ar:"غير حار من فضلك", zh:"不要辣", pinyin:"Bú yào là"},
+  {cat:"مطعم", ar:"الفاتورة من فضلك", zh:"买单，谢谢", pinyin:"Mǎidān, xièxiè"},
+  {cat:"مطعم", ar:"هل هذا حلال؟", zh:"这个是清真的吗？", pinyin:"Zhège shì qīngzhēn de ma?"},
+  {cat:"مطعم", ar:"ماء من فضلك", zh:"请给我水", pinyin:"Qǐng gěi wǒ shuǐ"},
+
+  {cat:"تاكسي/مواصلات", ar:"خذني إلى هذا العنوان من فضلك", zh:"请带我去这个地址", pinyin:"Qǐng dài wǒ qù zhège dìzhǐ"},
+  {cat:"تاكسي/مواصلات", ar:"كم تبعد المسافة؟", zh:"有多远？", pinyin:"Yǒu duō yuǎn?"},
+  {cat:"تاكسي/مواصلات", ar:"توقف هنا من فضلك", zh:"请停在这里", pinyin:"Qǐng tíng zài zhèlǐ"},
+  {cat:"تاكسي/مواصلات", ar:"أين المحطة؟", zh:"车站在哪里？", pinyin:"Chēzhàn zài nǎlǐ?"},
+  {cat:"تاكسي/مواصلات", ar:"تذكرة واحدة من فضلك", zh:"一张票，谢谢", pinyin:"Yī zhāng piào, xièxiè"},
+  {cat:"تاكسي/مواصلات", ar:"المطار", zh:"机场", pinyin:"Jīchǎng"},
+
+  {cat:"تسوق", ar:"بكم هذا؟", zh:"这个多少钱？", pinyin:"Zhège duōshǎo qián?"},
+  {cat:"تسوق", ar:"غالي جداً", zh:"太贵了", pinyin:"Tài guì le"},
+  {cat:"تسوق", ar:"هل يمكن تخفيض السعر؟", zh:"可以便宜一点吗？", pinyin:"Kěyǐ piányi yìdiǎn ma?"},
+  {cat:"تسوق", ar:"سآخذ هذا", zh:"我要这个", pinyin:"Wǒ yào zhège"},
+  {cat:"تسوق", ar:"هل تقبلون Alipay؟", zh:"可以用支付宝吗？", pinyin:"Kěyǐ yòng zhīfùbǎo ma?"},
+  {cat:"تسوق", ar:"مقاس أكبر/أصغر من فضلك", zh:"大一点/小一点，谢谢", pinyin:"Dà yìdiǎn/xiǎo yìdiǎn, xièxiè"},
+
+  {cat:"فندق", ar:"لدي حجز باسم...", zh:"我有预订，名字是...", pinyin:"Wǒ yǒu yùdìng, míngzì shì..."},
+  {cat:"فندق", ar:"مفتاح الغرفة من فضلك", zh:"请给我房卡", pinyin:"Qǐng gěi wǒ fángkǎ"},
+  {cat:"فندق", ar:"ما هو الواي فاي؟", zh:"WiFi密码是什么？", pinyin:"WiFi mìmǎ shì shénme?"},
+  {cat:"فندق", ar:"في أي ساعة تسجيل المغادرة؟", zh:"几点退房？", pinyin:"Jǐ diǎn tuìfáng?"},
+
+  {cat:"طوارئ", ar:"ساعدني من فضلك", zh:"请帮帮我", pinyin:"Qǐng bāng bāng wǒ"},
+  {cat:"طوارئ", ar:"أحتاج طبيب", zh:"我需要医生", pinyin:"Wǒ xūyào yīshēng"},
+  {cat:"طوارئ", ar:"اتصل بالشرطة", zh:"请叫警察", pinyin:"Qǐng jiào jǐngchá"},
+  {cat:"طوارئ", ar:"فقدت جواز سفري", zh:"我的护照丢了", pinyin:"Wǒ de hùzhào diū le"},
+  {cat:"طوارئ", ar:"أنا تائه", zh:"我迷路了", pinyin:"Wǒ mílù le"},
+  {cat:"طوارئ", ar:"أين أقرب مستشفى؟", zh:"最近的医院在哪里？", pinyin:"Zuìjìn de yīyuàn zài nǎlǐ?"},
+];
+
+// ===== Places (map section) =====
+const PLACES = [
+  {city:"بكين", icon:"🏯", name:"المدينة المحرمة", note:"أفضل وقت الصباح الباكر لتجنب الزحمة", lat:39.9163, lng:116.3972},
+  {city:"بكين", icon:"🧱", name:"سور الصين العظيم (باداجينغ)", note:"خذ جولة نهارية، البسها أحذية مريحة", lat:40.3584, lng:116.0166},
+  {city:"بكين", icon:"⛩️", name:"معبد السماء", note:"حديقة جميلة للمشي صباحاً", lat:39.8822, lng:116.4066},
+  {city:"بكين", icon:"🏮", name:"حي تشيان مين / وانغفوجينغ", note:"شارع تسوق ومأكولات شعبية", lat:39.9004, lng:116.3972},
+
+  {city:"تشنغدو", icon:"🐼", name:"قاعدة أبحاث الباندا", note:"اذهب صباحاً باكر، الباندا أكثر نشاطاً", lat:30.7326, lng:104.1467},
+  {city:"تشنغدو", icon:"🏮", name:"شارع كوانزهاي القديم", note:"أزقة تقليدية، رائع للمشي والطعام", lat:30.6743, lng:104.0555},
+
+  {city:"تشونغتشينغ", icon:"🌃", name:"كهف هونغيا (Hongya Cave)", note:"إطلالة ليلية رائعة، زوره بعد الغروب", lat:29.5628, lng:106.5763},
+  {city:"تشونغتشينغ", icon:"🚡", name:"التلفريك فوق نهر يانغتسي", note:"منظر للمدينة من فوق النهر", lat:29.5546, lng:106.5911},
+  {city:"تشونغتشينغ", icon:"🏘️", name:"بلدة تشيتشيكو القديمة", note:"بلدة تقليدية قديمة على النهر", lat:29.5895, lng:106.4581},
+
+  {city:"شنغهاي", icon:"🌉", name:"البند (The Bund)", note:"أجمل وقت هو الغروب/الليل للإضاءة", lat:31.2397, lng:121.4907},
+  {city:"شنغهاي", icon:"🏙️", name:"برج شنغهاي", note:"احجز مسبقاً للمنظر من الأعلى", lat:31.2336, lng:121.5051},
+  {city:"شنغهاي", icon:"🎢", name:"ديزني لاند شنغهاي", note:"خذ يوم كامل، حمل تطبيق ديزني للطوابير", lat:31.1443, lng:121.6577},
+  {city:"شنغهاي", icon:"🏮", name:"حي يو يوان", note:"حديقة وسوق تقليدي بمعمار صيني قديم", lat:31.2272, lng:121.4920},
+
+  {city:"جيجو (كوريا)", icon:"🌋", name:"سيونغسان إلتشولبونغ", note:"فوهة بركانية مطلة على البحر، شروق جميل", lat:33.4587, lng:126.9424},
+  {city:"جيجو (كوريا)", icon:"⛰️", name:"جبل هالا (Hallasan)", note:"أعلى قمة بكوريا الجنوبية، مسارات مشي متعددة", lat:33.3617, lng:126.5292},
+  {city:"جيجو (كوريا)", icon:"🏖️", name:"شاطئ هامدوك", note:"من أشهر شواطئ الجزيرة الرملية", lat:33.5432, lng:126.6694},
+];
+
+// ===== Packing checklist =====
+const PACKING_CATEGORIES = ["وثائق مهمة","إلكترونيات وتطبيقات","ملابس","العناية الشخصية","أخرى"];
+
+const PACKING_ITEMS = [
+  {cat:"وثائق مهمة", text:"جواز السفر + صورة عنه"},
+  {cat:"وثائق مهمة", text:"الفيزا / تأشيرة الدخول"},
+  {cat:"وثائق مهمة", text:"تذاكر الطيران (نسخة PDF محفوظة أوفلاين)"},
+  {cat:"وثائق مهمة", text:"حجوزات الفنادق مطبوعة أو محفوظة"},
+  {cat:"وثائق مهمة", text:"تأمين السفر"},
+  {cat:"وثائق مهمة", text:"صور شخصية إضافية (احتياط)"},
+
+  {cat:"إلكترونيات وتطبيقات", text:"تثبيت وشحن Alipay وربطه بالبطاقة"},
+  {cat:"إلكترونيات وتطبيقات", text:"تفعيل VPN قبل السفر"},
+  {cat:"إلكترونيات وتطبيقات", text:"تحميل خرائط أوفلاين (Amap / Apple Maps)"},
+  {cat:"إلكترونيات وتطبيقات", text:"محول كهرباء (Type A/C/I)"},
+  {cat:"إلكترونيات وتطبيقات", text:"باور بانك (مسموح في الشنطة اليدوية فقط)"},
+  {cat:"إلكترونيات وتطبيقات", text:"شاحن + كيبلات"},
+  {cat:"إلكترونيات وتطبيقات", text:"eSIM أو شريحة اتصال محلية"},
+
+  {cat:"ملابس", text:"ملابس صيفية خفيفة (الجو حار ورطب)"},
+  {cat:"ملابس", text:"حذاء مشي مريح"},
+  {cat:"ملابس", text:"مظلة أو معطف مطر خفيف"},
+  {cat:"ملابس", text:"ملابس محتشمة للمعابد"},
+
+  {cat:"العناية الشخصية", text:"واقي شمس"},
+  {cat:"العناية الشخصية", text:"أدوية شخصية + وصفة طبية"},
+  {cat:"العناية الشخصية", text:"معقم يدين ومناديل مبللة"},
+  {cat:"العناية الشخصية", text:"أدوية إسهال/مغص احتياطية"},
+
+  {cat:"أخرى", text:"كاش يوان احتياطي صغير"},
+  {cat:"أخرى", text:"حقيبة تسوق قابلة للطي"},
+  {cat:"أخرى", text:"قفل صغير للحقيبة"},
+];
+
+// ===== Quick money reference (typical prices in CNY) =====
+const QUICK_REF = [
+  {label:"زجاجة ماء", val:"¥3–5"},
+  {label:"وجبة شارع", val:"¥15–30"},
+  {label:"وجبة مطعم متوسط", val:"¥50–100"},
+  {label:"تذكرة مترو", val:"¥3–10"},
+  {label:"تاكسي (10 كم)", val:"¥20–35"},
+  {label:"قهوة", val:"¥25–35"},
+];
+
+// Fallback exchange rate (used if live fetch fails)
+const FALLBACK_RATE_CNY_TO_SAR = 0.52;
+const FALLBACK_RATE_KRW_TO_SAR = 0.0027;
+
+
+// ===================== Navigation =====================
+const pages = document.querySelectorAll(".page");
+const tabBtns = document.querySelectorAll(".tab-btn");
+
+function goToPage(name){
+  pages.forEach(p => p.classList.toggle("active", p.dataset.page === name));
+  tabBtns.forEach(b => b.classList.toggle("active", b.dataset.page === name));
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+tabBtns.forEach(btn => btn.addEventListener("click", () => goToPage(btn.dataset.page)));
+document.querySelectorAll("[data-goto]").forEach(btn=>{
+  btn.addEventListener("click", ()=> goToPage(btn.dataset.goto));
+});
+
+// ===================== Storage helpers (with localStorage fallback) =====================
+const hasCloudStorage = typeof window.storage !== "undefined";
+
+async function saveData(key, value){
+  try{
+    if(hasCloudStorage){
+      await window.storage.set(key, JSON.stringify(value));
+    } else {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  }catch(e){ console.error("save failed", key, e); }
+}
+
+async function loadData(key, fallback){
+  try{
+    if(hasCloudStorage){
+      const res = await window.storage.get(key);
+      return res ? JSON.parse(res.value) : fallback;
+    } else {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : fallback;
+    }
+  }catch(e){
+    return fallback;
+  }
+}
+
+// ===================== Days strip on header =====================
+function renderDaysStrip(){
+  const strip = document.getElementById("daysStrip");
+  const start = new Date(TRIP_START);
+  const today = new Date(); today.setHours(0,0,0,0);
+  let html = "";
+  ITINERARY.forEach(d=>{
+    const dDate = new Date(d.date);
+    const isToday = dDate.getTime() === today.getTime();
+    html += `<div class="day-chip ${isToday?'today':''}">يوم<span class="dnum">${d.day}</span></div>`;
+  });
+  strip.innerHTML = html;
+  if(strip.querySelector(".today")){
+    strip.querySelector(".today").scrollIntoView({inline:"center"});
+  }
+}
+
+// ===================== Home stats =====================
+function renderHomeStats(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const end = new Date(TRIP_END);
+  const start = new Date(TRIP_START);
+  let daysLeftEl = document.getElementById("statDaysLeft");
+  if(today < start){
+    const diff = Math.ceil((start - today)/86400000);
+    daysLeftEl.textContent = diff;
+    daysLeftEl.nextElementSibling.textContent = "يوم حتى السفر";
+  } else if(today <= end){
+    const diff = Math.ceil((end - today)/86400000);
+    daysLeftEl.textContent = diff;
+    daysLeftEl.nextElementSibling.textContent = "يوم متبقي بالرحلة";
+  } else {
+    daysLeftEl.textContent = "✓";
+    daysLeftEl.nextElementSibling.textContent = "الرحلة انتهت";
+  }
+}
+
+// ===================== Itinerary =====================
+function renderItinerary(filterCity){
+  const list = document.getElementById("itineraryList");
+  const today = new Date(); today.setHours(0,0,0,0);
+  const items = ITINERARY.filter(d => !filterCity || filterCity === "الكل" || d.city === filterCity);
+  list.innerHTML = items.map(d=>{
+    const dDate = new Date(d.date);
+    const isToday = dDate.getTime() === today.getTime();
+    const dateStr = dDate.toLocaleDateString("en-GB",{day:"numeric", month:"short"});
+    const travelTag = d.travel ? `<span style="color:var(--red-deep); font-size:11px; font-weight:700;">✈️ سفر</span>` : "";
+    return `<div class="day-card ${isToday?'today-card':''}">
+      <div class="day-card-head">
+        <span class="day-card-city">${d.city} ${travelTag}</span>
+        <span class="day-card-date">Day ${d.day} · ${dateStr}</span>
+      </div>
+      <p class="day-card-title">${d.title}</p>
+    </div>`;
+  }).join("");
+}
+
+function renderCityFilter(){
+  const cities = ["الكل", ...new Set(ITINERARY.map(d=>d.city))];
+  const filterEl = document.getElementById("cityFilter");
+  filterEl.innerHTML = cities.map((c,i)=>
+    `<button class="city-chip ${i===0?'active':''}" data-city="${c}">${c}</button>`
+  ).join("");
+  filterEl.querySelectorAll(".city-chip").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      filterEl.querySelectorAll(".city-chip").forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
+      renderItinerary(chip.dataset.city);
+    });
+  });
+}
+
+// ===================== Phrases =====================
+let activePhraseCategory = "الكل";
+let phraseSearchTerm = "";
+
+function renderPhraseCategories(){
+  const wrap = document.getElementById("phraseCategories");
+  wrap.innerHTML = PHRASE_CATEGORIES.map((c,i)=>
+    `<button class="phrase-cat-chip ${i===0?'active':''}" data-cat="${c}">${c}</button>`
+  ).join("");
+  wrap.querySelectorAll(".phrase-cat-chip").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      wrap.querySelectorAll(".phrase-cat-chip").forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
+      activePhraseCategory = chip.dataset.cat;
+      renderPhraseList();
+    });
+  });
+}
+
+function renderPhraseList(){
+  const list = document.getElementById("phraseList");
+  let items = PHRASES.filter(p => activePhraseCategory==="الكل" || p.cat === activePhraseCategory);
+  if(phraseSearchTerm.trim()){
+    const t = phraseSearchTerm.trim();
+    items = items.filter(p => p.ar.includes(t) || p.pinyin.toLowerCase().includes(t.toLowerCase()) || p.zh.includes(t));
+  }
+  if(items.length === 0){
+    list.innerHTML = `<div class="empty-state">لا توجد نتائج</div>`;
+    return;
+  }
+  list.innerHTML = items.map((p, idx)=>`
+    <div class="phrase-item">
+      <div class="phrase-ar">${p.ar}</div>
+      <div class="phrase-zh">
+        <button class="speak-btn" data-zh="${p.zh}" aria-label="نطق">🔊</button>
+        <span>${p.zh}</span>
+      </div>
+      <div class="phrase-pinyin">${p.pinyin}</div>
+    </div>
+  `).join("");
+
+  list.querySelectorAll(".speak-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=> speakChinese(btn.dataset.zh, btn));
+  });
+}
+
+// ===================== Text-to-speech =====================
+let zhVoice = null;
+function loadVoices(){
+  const voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  zhVoice = voices.find(v => v.lang === "zh-CN") || voices.find(v => v.lang && v.lang.startsWith("zh")) || null;
+}
+if(window.speechSynthesis){
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function speakChinese(text, btnEl){
+  if(!window.speechSynthesis){
+    alert("متصفحك لا يدعم النطق الصوتي");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "zh-CN";
+  if(zhVoice) utter.voice = zhVoice;
+  utter.rate = 0.85;
+  if(btnEl){
+    document.querySelectorAll(".speak-btn.playing").forEach(b=>b.classList.remove("playing"));
+    btnEl.classList.add("playing");
+    utter.onend = ()=> btnEl.classList.remove("playing");
+    utter.onerror = ()=> btnEl.classList.remove("playing");
+  }
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById("phraseSearch").addEventListener("input", (e)=>{
+  phraseSearchTerm = e.target.value;
+  renderPhraseList();
+});
+
+// ===================== Money converter =====================
+let currentRate = FALLBACK_RATE_CNY_TO_SAR;
+
+function updateRateDisplay(fromCache){
+  document.getElementById("rateLine").textContent = `١ يوان (CNY) = ${currentRate.toFixed(4)} ريال (SAR)`;
+  document.getElementById("rateUpdated").textContent = fromCache ? "سعر تقريبي (بدون اتصال)" : "آخر تحديث: الآن";
+}
+
+async function fetchExchangeRate(){
+  try{
+    const res = await fetch("https://api.exchangerate-api.com/v4/latest/CNY");
+    if(!res.ok) throw new Error("bad response");
+    const data = await res.json();
+    if(data && data.rates && data.rates.SAR){
+      currentRate = data.rates.SAR;
+      updateRateDisplay(false);
+      recalcFromCny();
+      return;
+    }
+    throw new Error("no SAR rate");
+  }catch(e){
+    updateRateDisplay(true);
+  }
+}
+
+const cnyInput = document.getElementById("cnyInput");
+const sarInput = document.getElementById("sarInput");
+
+function recalcFromCny(){
+  const v = parseFloat(cnyInput.value);
+  if(!isNaN(v)){
+    sarInput.value = (v * currentRate).toFixed(2);
+  }
+}
+function recalcFromSar(){
+  const v = parseFloat(sarInput.value);
+  if(!isNaN(v)){
+    cnyInput.value = (v / currentRate).toFixed(2);
+  }
+}
+cnyInput.addEventListener("input", recalcFromCny);
+sarInput.addEventListener("input", recalcFromSar);
+document.getElementById("refreshRate").addEventListener("click", fetchExchangeRate);
+
+let currentKrwRate = FALLBACK_RATE_KRW_TO_SAR;
+const krwInput = document.getElementById("krwInput");
+const sarKrwInput = document.getElementById("sarKrwInput");
+
+function updateKrwRateDisplay(){
+  document.getElementById("krwRateLine").textContent = `١٠٠٠ وون (KRW) ≈ ${(currentKrwRate*1000).toFixed(2)} ريال (تقريبي)`;
+}
+
+async function fetchKrwRate(){
+  try{
+    const res = await fetch("https://api.exchangerate-api.com/v4/latest/KRW");
+    if(!res.ok) throw new Error("bad response");
+    const data = await res.json();
+    if(data && data.rates && data.rates.SAR){
+      currentKrwRate = data.rates.SAR;
+    }
+  }catch(e){ /* keep fallback */ }
+  updateKrwRateDisplay();
+}
+
+if(krwInput){
+  krwInput.addEventListener("input", ()=>{
+    const v = parseFloat(krwInput.value);
+    if(!isNaN(v)) sarKrwInput.value = (v * currentKrwRate).toFixed(2);
+  });
+  sarKrwInput.addEventListener("input", ()=>{
+    const v = parseFloat(sarKrwInput.value);
+    if(!isNaN(v)) krwInput.value = (v / currentKrwRate).toFixed(0);
+  });
+}
+
+function renderQuickRef(){
+  document.getElementById("quickRefGrid").innerHTML = QUICK_REF.map(q=>
+    `<div class="quick-ref-item"><span>${q.label}</span><b>${q.val}</b></div>`
+  ).join("");
+}
+
+// ===================== Map / Places =====================
+function renderMapCityFilter(){
+  const cities = ["الكل", ...new Set(PLACES.map(p=>p.city))];
+  const filterEl = document.getElementById("mapCityFilter");
+  filterEl.innerHTML = cities.map((c,i)=>
+    `<button class="city-chip ${i===0?'active':''}" data-city="${c}">${c}</button>`
+  ).join("");
+  filterEl.querySelectorAll(".city-chip").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      filterEl.querySelectorAll(".city-chip").forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
+      renderPlaces(chip.dataset.city);
+    });
+  });
+}
+
+function renderPlaces(filterCity){
+  const list = document.getElementById("placeList");
+  const items = PLACES.filter(p => !filterCity || filterCity==="الكل" || p.city === filterCity);
+  list.innerHTML = items.map(p=>{
+    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+    return `<div class="place-card">
+      <span class="place-icon">${p.icon}</span>
+      <div>
+        <div class="place-name">${p.name}</div>
+        <div class="place-city">${p.city}</div>
+        <div class="place-note">${p.note}</div>
+        <a class="place-link" href="${mapUrl}" target="_blank" rel="noopener">فتح في الخرائط ↗</a>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+// ===================== Budget =====================
+let expenses = [];
+
+const CATEGORY_ICONS = {
+  "أكل":"🍜","مواصلات":"🚕","فندق":"🏨","تسوق":"🛍️","ترفيه":"🎡","أخرى":"📦"
+};
+
+async function initExpenses(){
+  expenses = await loadData("expenses", []);
+  renderExpenses();
+}
+
+async function addExpense(amount, category, note){
+  expenses.unshift({id:Date.now(), amount, category, note, date:new Date().toISOString()});
+  await saveData("expenses", expenses);
+  renderExpenses();
+}
+
+async function deleteExpense(id){
+  expenses = expenses.filter(e=>e.id !== id);
+  await saveData("expenses", expenses);
+  renderExpenses();
+}
+
+function renderExpenses(){
+  const total = expenses.reduce((s,e)=>s+e.amount,0);
+  document.getElementById("budgetTotal").textContent = `¥${total.toFixed(0)}`;
+  document.getElementById("statSpent").textContent = `¥${total.toFixed(0)}`;
+
+  const byCat = {};
+  expenses.forEach(e=>{ byCat[e.category] = (byCat[e.category]||0) + e.amount; });
+  const breakdown = document.getElementById("budgetBreakdown");
+  const cats = Object.keys(CATEGORY_ICONS);
+  breakdown.innerHTML = cats.map(c=>
+    `<div class="bd-item">${CATEGORY_ICONS[c]} ${c}<b>¥${(byCat[c]||0).toFixed(0)}</b></div>`
+  ).join("");
+
+  const list = document.getElementById("expenseList");
+  if(expenses.length === 0){
+    list.innerHTML = `<div class="empty-state">لا توجد مصاريف مسجلة بعد</div>`;
+    return;
+  }
+  list.innerHTML = expenses.slice(0,20).map(e=>`
+    <div class="expense-row">
+      <span><span class="expense-cat">${CATEGORY_ICONS[e.category]||"📦"}</span>${e.note ? e.note : e.category}</span>
+      <span>
+        <span class="expense-amount">¥${e.amount.toFixed(0)}</span>
+        <button class="expense-del" data-id="${e.id}" aria-label="حذف">✕</button>
+      </span>
+    </div>
+  `).join("");
+  list.querySelectorAll(".expense-del").forEach(btn=>{
+    btn.addEventListener("click", ()=> deleteExpense(Number(btn.dataset.id)));
+  });
+}
+
+document.getElementById("expenseForm").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const amount = parseFloat(document.getElementById("expAmount").value);
+  const category = document.getElementById("expCategory").value;
+  const note = document.getElementById("expNote").value.trim();
+  if(isNaN(amount) || amount <= 0) return;
+  addExpense(amount, category, note);
+  e.target.reset();
+});
+
+// ===================== Packing checklist =====================
+let checklistState = {}; // id -> boolean
+let customItems = []; // user-added items {id, cat, text}
+
+function itemId(cat, text){ return `${cat}::${text}`; }
+
+async function initPacking(){
+  checklistState = await loadData("checklistState", {});
+  customItems = await loadData("customItems", []);
+  populateCategorySelect();
+  renderChecklist();
+}
+
+function populateCategorySelect(){
+  const sel = document.getElementById("newItemCategory");
+  sel.innerHTML = PACKING_CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join("");
+}
+
+function allItemsForCat(cat){
+  const base = PACKING_ITEMS.filter(i=>i.cat===cat);
+  const custom = customItems.filter(i=>i.cat===cat);
+  return [...base, ...custom];
+}
+
+function renderChecklist(){
+  const wrap = document.getElementById("checklistGroup");
+  let totalCount = 0, doneCount = 0;
+  let html = "";
+  PACKING_CATEGORIES.forEach(cat=>{
+    const items = allItemsForCat(cat);
+    if(items.length===0) return;
+    html += `<div class="checklist-cat-title">${cat}</div>`;
+    items.forEach(item=>{
+      const id = itemId(cat, item.text);
+      const done = !!checklistState[id];
+      totalCount++; if(done) doneCount++;
+      const isCustom = customItems.some(c=>itemId(c.cat,c.text)===id);
+      html += `<div class="check-item ${done?'done':''}" data-id="${id}">
+        <span class="check-seal">${done?'✓':''}</span>
+        <span class="check-text">${item.text}</span>
+        ${isCustom ? `<button class="check-del" data-del="${id}" aria-label="حذف">✕</button>` : ""}
+      </div>`;
+    });
+  });
+  wrap.innerHTML = html;
+  document.getElementById("statPacked").textContent = `${doneCount}/${totalCount}`;
+
+  wrap.querySelectorAll(".check-item").forEach(el=>{
+    el.addEventListener("click", (e)=>{
+      if(e.target.closest(".check-del")) return;
+      toggleItem(el.dataset.id);
+    });
+  });
+  wrap.querySelectorAll("[data-del]").forEach(btn=>{
+    btn.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      removeCustomItem(btn.dataset.del);
+    });
+  });
+}
+
+async function toggleItem(id){
+  checklistState[id] = !checklistState[id];
+  await saveData("checklistState", checklistState);
+  renderChecklist();
+}
+
+async function removeCustomItem(id){
+  customItems = customItems.filter(c => itemId(c.cat,c.text) !== id);
+  delete checklistState[id];
+  await saveData("customItems", customItems);
+  await saveData("checklistState", checklistState);
+  renderChecklist();
+}
+
+document.getElementById("addItemForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const text = document.getElementById("newItemText").value.trim();
+  const cat = document.getElementById("newItemCategory").value;
+  if(!text) return;
+  customItems.push({cat, text});
+  await saveData("customItems", customItems);
+  renderChecklist();
+  e.target.reset();
+});
+
+// ===================== Init =====================
+(async function init(){
+  renderDaysStrip();
+  renderHomeStats();
+  renderCityFilter();
+  renderItinerary("الكل");
+  renderPhraseCategories();
+  renderPhraseList();
+  renderQuickRef();
+  updateRateDisplay(true);
+  fetchExchangeRate();
+  updateKrwRateDisplay();
+  fetchKrwRate();
+  renderMapCityFilter();
+  renderPlaces("الكل");
+  await initExpenses();
+  await initPacking();
+})();
+
+</script>
+</body>
+</html>
