@@ -1080,19 +1080,32 @@ function stopMusic(){
   document.getElementById("musicBtn").textContent = "🔇";
 }
 
+let userHasInteracted = false;
+let userDisabledMusic = false;
+let currentPageName = "home";
+
 document.getElementById("musicBtn").addEventListener("click", ()=>{
-  if(musicPlaying) stopMusic(); else startMusic();
+  if(musicPlaying){
+    stopMusic();
+    userDisabledMusic = true;
+  } else {
+    startMusic();
+    userDisabledMusic = false;
+  }
 });
 
-// Autoplay after first user interaction anywhere on the page (browser autoplay policy requirement)
+// Autoplay after first user interaction — only applies while on the home page
 function armAutoplayOnFirstTouch(){
-  const startOnce = ()=>{
-    startMusic();
-    document.removeEventListener("click", startOnce);
-    document.removeEventListener("touchstart", startOnce);
+  const tryStart = ()=>{
+    userHasInteracted = true;
+    if(currentPageName === "home" && !userDisabledMusic && !musicPlaying){
+      startMusic();
+    }
+    document.removeEventListener("click", tryStart);
+    document.removeEventListener("touchstart", tryStart);
   };
-  document.addEventListener("click", startOnce, {once:true});
-  document.addEventListener("touchstart", startOnce, {once:true});
+  document.addEventListener("click", tryStart, {once:true});
+  document.addEventListener("touchstart", tryStart, {once:true});
 }
 armAutoplayOnFirstTouch();
 
@@ -1104,6 +1117,15 @@ function goToPage(name){
   pages.forEach(p => p.classList.toggle("active", p.dataset.page === name));
   tabBtns.forEach(b => b.classList.toggle("active", b.dataset.page === name));
   window.scrollTo({top:0, behavior:"instant"});
+
+  currentPageName = name;
+  if(name === "home"){
+    if(userHasInteracted && !userDisabledMusic && !musicPlaying){
+      startMusic();
+    }
+  } else {
+    if(musicPlaying) stopMusic();
+  }
 }
 
 tabBtns.forEach(btn => btn.addEventListener("click", () => goToPage(btn.dataset.page)));
