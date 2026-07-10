@@ -63,6 +63,27 @@ body::before{
   max-width:640px;
   margin:0 auto;
 }
+.music-btn{
+  flex-shrink:0;
+  width:40px; height:40px;
+  border-radius:50%;
+  border:1.5px solid rgba(250,246,238,0.25);
+  background:rgba(250,246,238,0.06);
+  color:var(--paper);
+  font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  margin-inline-start:auto;
+  transition:transform .15s ease, background .15s ease;
+}
+.music-btn:active{transform:scale(0.9);}
+.music-btn.on{
+  background:var(--red);
+  border-color:var(--red);
+}
+.music-btn.on .music-icon-off{display:none;}
+.music-btn .music-icon-on{display:none;}
+.music-btn.on .music-icon-on{display:inline;}
 .seal{
   flex-shrink:0;
   width:52px;height:52px;
@@ -592,6 +613,7 @@ button:focus-visible, input:focus-visible, select:focus-visible{
       <h1>رحلتي إلى الصين</h1>
       <p class="header-sub">١٤ يوليو — ٩ أغسطس · ٢٦ يوماً</p>
     </div>
+    <button class="music-btn" id="musicBtn" aria-label="تشغيل/إيقاف الموسيقى">🔇</button>
   </div>
   <div class="days-strip" id="daysStrip"></div>
 </header>
@@ -949,6 +971,130 @@ const QUICK_REF = [
 const FALLBACK_RATE_CNY_TO_SAR = 0.52;
 const FALLBACK_RATE_KRW_TO_SAR = 0.0027;
 
+
+// ===================== Original ambient music (Karplus-Strong oud-style synth) =====================
+// Fully original composition generated in-browser — no external audio files, no copyrighted material.
+let audioCtx = null;
+let musicPlaying = false;
+let musicTimer = null;
+
+function noteFreq(semitonesFromA4){
+  return 440 * Math.pow(2, semitonesFromA4/12);
+}
+
+// D pentatonic-ish scale (common flavor in Chinese melodic writing), built as semitone offsets from A4
+const SCALE = {
+  D3: noteFreq(-19), E3: noteFreq(-17), FS3: noteFreq(-15), A3: noteFreq(-12),
+  B3: noteFreq(-10), D4: noteFreq(-7),  E4: noteFreq(-5),  FS4: noteFreq(-3),
+  A4: noteFreq(0),   B4: noteFreq(2),   D5: noteFreq(5),   E5: noteFreq(7)
+};
+
+// Original short melodic phrase (loops). Values: [note, duration in beats]
+const MELODY = [
+  ["D4",1], ["FS4",0.5], ["E4",0.5], ["A4",1], ["B4",1],
+  ["A4",0.5], ["FS4",0.5], ["D4",1], ["E4",1],
+  ["FS4",1], ["A4",0.5], ["B4",0.5], ["D5",1.5], ["B4",0.5],
+  ["A4",1], ["FS4",1], ["E4",1], ["D4",2],
+];
+const BEAT_SEC = 0.42;
+
+// Karplus-Strong plucked-string synthesis — produces an oud/pipa-like decaying tone
+function pluckBuffer(ctx, freq, durationSec){
+  const sampleRate = ctx.sampleRate;
+  const length = Math.floor(sampleRate * durationSec);
+  const buffer = ctx.createBuffer(1, length, sampleRate);
+  const data = buffer.getChannelData(0);
+
+  const period = Math.round(sampleRate / freq);
+  const ringBuf = new Float32Array(period);
+  for(let i=0;i<period;i++){
+    ringBuf[i] = Math.random()*2-1; // noise burst = the "pluck"
+  }
+  let idx = 0;
+  const damping = 0.996; // higher = longer sustain, warmer decay like an oud string
+  for(let i=0;i<length;i++){
+    const next = ringBuf[idx];
+    const nextIdx = (idx+1) % period;
+    const avg = damping * 0.5 * (ringBuf[idx] + ringBuf[nextIdx]);
+    data[i] = next;
+    ringBuf[idx] = avg;
+    idx = nextIdx;
+  }
+  // gentle overall envelope so tail fades smoothly
+  for(let i=0;i<length;i++){
+    const t = i/length;
+    data[i] *= Math.pow(1-t, 0.6);
+  }
+  return buffer;
+}
+
+function playNote(freq, startTime, durationSec, gainVal){
+  const buffer = pluckBuffer(audioCtx, freq, Math.max(durationSec*2.2, 1.2));
+  const src = audioCtx.createBufferSource();
+  src.buffer = buffer;
+
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(gainVal, startTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + durationSec*2.2);
+
+  // subtle warmth filter, oud tone leans mellow not bright
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = 2600;
+
+  src.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioCtx.destination);
+  src.start(startTime);
+}
+
+function scheduleLoop(){
+  if(!musicPlaying) return;
+  const now = audioCtx.currentTime + 0.05;
+  let t = now;
+  MELODY.forEach(([noteName, beats])=>{
+    const freq = SCALE[noteName];
+    const dur = beats * BEAT_SEC;
+    playNote(freq, t, dur, 0.16);
+    t += dur;
+  });
+  const totalDur = MELODY.reduce((s,[,b])=>s+b*BEAT_SEC, 0);
+  musicTimer = setTimeout(scheduleLoop, totalDur*1000 - 60);
+}
+
+function startMusic(){
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if(audioCtx.state === "suspended") audioCtx.resume();
+  musicPlaying = true;
+  scheduleLoop();
+  document.getElementById("musicBtn").classList.add("on");
+  document.getElementById("musicBtn").textContent = "🔊";
+}
+
+function stopMusic(){
+  musicPlaying = false;
+  if(musicTimer) clearTimeout(musicTimer);
+  document.getElementById("musicBtn").classList.remove("on");
+  document.getElementById("musicBtn").textContent = "🔇";
+}
+
+document.getElementById("musicBtn").addEventListener("click", ()=>{
+  if(musicPlaying) stopMusic(); else startMusic();
+});
+
+// Autoplay after first user interaction anywhere on the page (browser autoplay policy requirement)
+function armAutoplayOnFirstTouch(){
+  const startOnce = ()=>{
+    startMusic();
+    document.removeEventListener("click", startOnce);
+    document.removeEventListener("touchstart", startOnce);
+  };
+  document.addEventListener("click", startOnce, {once:true});
+  document.addEventListener("touchstart", startOnce, {once:true});
+}
+armAutoplayOnFirstTouch();
 
 // ===================== Navigation =====================
 const pages = document.querySelectorAll(".page");
